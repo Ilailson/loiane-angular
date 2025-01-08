@@ -3,6 +3,7 @@ https://github.com/loiane/curso-angular
 ng add @angular/material
 
 https://material.angular.io/components/toolbar/overview
+https://material.angular.io/components/toolbar/api
 
 ng g m courses
 ng g m courses --routing //com rotiamento
