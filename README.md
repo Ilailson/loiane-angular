@@ -12,3 +12,6 @@ ng g c courses/courses
 
 
 https://v17.angular.io/guide/lazy-loading-ngmodules
+
+
+npm run start
