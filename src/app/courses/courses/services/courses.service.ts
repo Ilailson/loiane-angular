@@ -17,9 +17,15 @@ constructor(private httpClient: HttpClient) { }
     return this.httpClient.get<Course[]>(this.API)
     .pipe(
       first(),
-      delay(1000),
+      // delay(1000),
       tap(courses => console.log(courses))
     );
+  }
+
+  save(record: Course) {
+    console.log('Dados do formulario')
+    console.log(record)
+    return this.httpClient.post<Course>(this.API, record);
   }
 
 }
