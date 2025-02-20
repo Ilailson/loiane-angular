@@ -3,17 +3,18 @@ import { CommonModule } from '@angular/common';
 
 import { CoursesRoutingModule } from './courses-routing.module';
 import { AppMatreialModule } from '../shared/app-matreial/app-matreial.module';
-import { CoursesComponent } from './courses/courses.component';
+import { CoursesComponent } from './containers/courses/courses.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { CourseFormComponent } from './course-form/course-form.component';
+import { CourseFormComponent } from './containers/course-form/course-form.component';
+import { CoursesListComponent } from './components/courses-list/courses-list.component';
 
 @NgModule({
   declarations: [
     CoursesComponent,
-    CourseFormComponent
+    CourseFormComponent,
+    CoursesListComponent
   ],
   imports: [
     CommonModule,
