@@ -22,9 +22,9 @@ constructor(private httpClient: HttpClient) { }
     );
   }
 
-  save(record: Course) {
-    console.log('Dados do formulario')
-    console.log(record)
+  save(record: Partial<Course>) {
+    // console.log('Dados do formulario')
+    // console.log(record)
     return this.httpClient.post<Course>(this.API, record);
   }
 
