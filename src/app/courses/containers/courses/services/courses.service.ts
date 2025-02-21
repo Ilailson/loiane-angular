@@ -27,9 +27,22 @@ constructor(private httpClient: HttpClient) { }
   }
 
   save(record: Partial<Course>) {
-    // console.log('Dados do formulario')
-    // console.log(record)
+    console.log('Informação record', record);
+    if(record._id){
+      // console.log('Update');
+      return this.update(record);
+    }
+    // console.log('Created');
+    return this.create(record);
+
+  }
+
+  private create(record: Partial<Course>){
     return this.httpClient.post<Course>(this.API, record);
+  }
+
+  private update(record: Partial<Course> ){
+    return this.httpClient.put<Course>(`${this.API}/${record._id}`, record);
   }
 
 }
