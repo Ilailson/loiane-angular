@@ -22,6 +22,10 @@ constructor(private httpClient: HttpClient) { }
     );
   }
 
+  loadById(id: string) {
+    return this.httpClient.get<Course>(`${this.API}/${id}`);
+  }
+
   save(record: Partial<Course>) {
     // console.log('Dados do formulario')
     // console.log(record)
