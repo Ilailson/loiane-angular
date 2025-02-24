@@ -16,6 +16,8 @@ export class CoursesListComponent {
 
   @Output() edit = new EventEmitter(false);
 
+  @Output() remove = new EventEmitter(false);
+
 
                                           //acitions
   readonly displayedColumns = ['name', 'category', 'actions'];
@@ -29,6 +31,10 @@ export class CoursesListComponent {
 
   onEdit(course: Course) {
     this.edit.emit(course);
+  }
+
+  onDelete(course: Course) {
+    this.remove.emit(course);
   }
 
 }
