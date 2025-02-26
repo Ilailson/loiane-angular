@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder} from '@angular/forms';
+import { NonNullableFormBuilder, Validators} from '@angular/forms';
 import { CoursesService } from '../courses/services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
@@ -16,10 +16,28 @@ export class CourseFormComponent implements OnInit {
   //mesma coisa que declarar no construtor
   form  = this.formbuilder.group({
     _id: [''],
-    name: [''],
-    category: ['']
+    name: ['',[Validators.required
+              ,Validators.minLength(5)
+              ,Validators.maxLength(100)]
+          ],
+    category: ['',[Validators.required]]
   });
 
+  getErrorMessage(fieldName: string) {
+    const field = this.form.get(fieldName);
+    if (field?.hasError('required')) {
+      return 'Campo obrigatorio';
+    }
+    if (field?.hasError('minlength')) {
+      const requiredLength = field.errors ? field.errors['minlength'].requiredLength : 5;
+      return `Tamanho mínimo requerido ${requiredLength} caracteres.`;
+    }
+    if (field?.hasError('maxlength')) {
+      const requiredLength = field.errors ? field.errors['maxlength'].requiredLength : 200;
+      return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
+    }
+    return 'Campo invalido';
+  }
 
   constructor(
     private location: Location,
@@ -41,6 +59,9 @@ export class CourseFormComponent implements OnInit {
   }
 
   onSubmit(){
+      if (this.form.invalid) {
+    return;
+  }
     this.service.save(this.form.value)
                 .subscribe(
                   result => this.onSucess(),
@@ -50,6 +71,17 @@ export class CourseFormComponent implements OnInit {
                 );
     this.onCancel();
 }
+
+// onSubmit() {
+//   if (this.form.invalid) {
+//     return;
+//   }
+
+//   this.service.save(this.form.value).subscribe({
+//     next: () => this.onSucess(),
+//     error: () => this.onError(),
+//   });
+// }
 
   onCancel(){
     this.location.back();//voltar pagina
