@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, NonNullableFormBuilder, Validators} from '@angular/forms'; // +
+import { FormGroup, NonNullableFormBuilder, UntypedFormArray, Validators} from '@angular/forms'; // +
 import { CoursesService } from '../courses/services/courses.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
@@ -13,7 +13,7 @@ import { Lesson } from '../../model/lesson'; // +
   styleUrls: ['./course-form.component.css']
 })
 export class CourseFormComponent implements OnInit {
-  form!: FormGroup; //+ 
+  form!: FormGroup; //+
 
   getErrorMessage(fieldName: string) {
     const field = this.form.get(fieldName);
@@ -74,6 +74,10 @@ export class CourseFormComponent implements OnInit {
         youtubeUrl: [lesson.youtubeUrl, Validators.required]
       })
   }
+
+getLessonsFormArray() {
+    return (<UntypedFormArray>this.form.get('lessons')).controls;
+}
 
   onSubmit(){
       if (this.form.invalid) {
