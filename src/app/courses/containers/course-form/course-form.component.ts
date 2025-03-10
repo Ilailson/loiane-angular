@@ -54,7 +54,8 @@ export class CourseFormComponent implements OnInit {
       _id: course._id,
       name: course.name,
       category: course.category
-    })
+    });
+    console.log(course)
 
   }
 
