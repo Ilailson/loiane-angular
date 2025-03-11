@@ -50,10 +50,8 @@ export class CourseFormComponent implements OnInit {
                   ,Validators.maxLength(100)]
               ],
         category: [course.category,[Validators.required]],
-        lessons: this.formbuilder.array(this.retrieveLessons(course))
+        lessons: this.formbuilder.array(this.retrieveLessons(course), Validators.required)
       });
-      // console.log(this.form);
-      // console.log(this.form.value);
   }
 
   private retrieveLessons(course: Course ) {
@@ -70,8 +68,12 @@ export class CourseFormComponent implements OnInit {
   private createLesson(lesson: Lesson = {id: '', name: '', youtubeUrl: ''}){
       return this.formbuilder.group({
         id: [lesson.id],
-        name: [lesson.name, Validators.required],
-        youtubeUrl: [lesson.youtubeUrl, Validators.required]
+        name: [lesson.name, [Validators.required
+          ,Validators.minLength(5)
+          ,Validators.maxLength(100)]],
+        youtubeUrl: [lesson.youtubeUrl, [Validators.required
+          ,Validators.minLength(10)
+          ,Validators.maxLength(11)]]
       })
   }
 
@@ -90,19 +92,28 @@ removeLesson(index: number) {
   lessons.removeAt(index);
 }
 
-  onSubmit(){
-      if (this.form.invalid) {
-    return;
-  }
+onSubmit(): void {
+  if (this.form.valid) {
     this.service.save(this.form.value)
-                .subscribe(
-                  result => this.onSucess(),
-                  error => {
-                    this.onError();
-                  }
-                );
-    this.onCancel();
+      .subscribe(result => this.onSucess(), error => this.onError());
+  } else {
+    alert('Formulario invalido');
+  }
 }
+
+//   onSubmit(){
+//       if (this.form.invalid) {
+//     return;
+//   }
+//     this.service.save(this.form.value)
+//                 .subscribe(
+//                   result => this.onSucess(),
+//                   error => {
+//                     this.onError();
+//                   }
+//                 );
+//     this.onCancel();
+// }
 
 // onSubmit() {
 //   if (this.form.invalid) {
@@ -131,6 +142,11 @@ removeLesson(index: number) {
       'Fechar', {
         duration: 2000 // Duração em milissegundos (5 segundos)
     });
+  }
+
+  isFormArrayRequed() {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    return !lessons.valid &&  lessons.hasError('required')  && lessons.touched;
   }
 
 }
