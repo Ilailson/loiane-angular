@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson'; // +
+import { FormUtilsService } from 'src/app/shared/form/form-utils.service';
 
 @Component({
   selector: 'app-course-form',
@@ -15,29 +16,14 @@ import { Lesson } from '../../model/lesson'; // +
 export class CourseFormComponent implements OnInit {
   form!: FormGroup; //+
 
-  getErrorMessage(fieldName: string) {
-    const field = this.form.get(fieldName);
-    if (field?.hasError('required')) {
-      return 'Campo obrigatorio';
-    }
-    if (field?.hasError('minlength')) {
-      const requiredLength = field.errors ? field.errors['minlength'].requiredLength : 5;
-      return `Tamanho mínimo requerido ${requiredLength} caracteres.`;
-    }
-    if (field?.hasError('maxlength')) {
-      const requiredLength = field.errors ? field.errors['maxlength'].requiredLength : 200;
-      return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
-    }
-    return 'Campo invalido';
-  }
-
   constructor(
     private location: Location,
     private snackBar: MatSnackBar,
     private service: CoursesService,
     private formbuilder: NonNullableFormBuilder,
-    private route: ActivatedRoute) {
-    // this.form
+    private route: ActivatedRoute,
+    public formUtils: FormUtilsService
+  ) {
    }
 
   ngOnInit() {
@@ -97,35 +83,9 @@ onSubmit(): void {
     this.service.save(this.form.value)
       .subscribe(result => this.onSucess(), error => this.onError());
   } else {
-    alert('Formulario invalido');
+    this.formUtils.validateAllFormFields(this.form);
   }
 }
-
-//   onSubmit(){
-//       if (this.form.invalid) {
-//     return;
-//   }
-//     this.service.save(this.form.value)
-//                 .subscribe(
-//                   result => this.onSucess(),
-//                   error => {
-//                     this.onError();
-//                   }
-//                 );
-//     this.onCancel();
-// }
-
-// onSubmit() {
-//   if (this.form.invalid) {
-//     return;
-//   }
-
-//   this.service.save(this.form.value).subscribe({
-//     next: () => this.onSucess(),
-//     error: () => this.onError(),
-//   });
-// }
-
   onCancel(){
     this.location.back();//voltar pagina
   }
@@ -143,10 +103,4 @@ onSubmit(): void {
         duration: 2000 // Duração em milissegundos (5 segundos)
     });
   }
-
-  isFormArrayRequed() {
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    return !lessons.valid &&  lessons.hasError('required')  && lessons.touched;
-  }
-
 }
